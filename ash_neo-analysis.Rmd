@@ -1,0 +1,517 @@
+---
+title: "Ash-Neophobia"
+author: "Allison Davis Connelly"
+date: "1/17/2024"
+output: 
+  html_document:
+    toc: TRUE
+    toc_depth: 5
+    toc_float:
+      collapsed: FALSE
+  
+      
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Neophobia experiment
+
+*Purpose:* Our interest lies in whether these two reproductive systems that affect genetic variation in different ways produce similar phenotypes –both in terms of means and levels of variation—that assist in their continued coexistence. More specifically to test if there are differences in object neophobia between asexual (amazon molly) and sexual (sailfin molly) species. 
+
+*Hypothesis:* Differences in asexual and sexual reproductive systems—namely the amount of genetic variation produced, or how genetic variation is partitioned—do not constrain phenotypic evolution.
+
+*Predictions:*
+  - Neophobia: Amazons and sailfins will differ in their response to novel objects. This allows the continued coexistance in the asexual-sexual system of the Amazon molly.
+  
+  - How it relates to hypothesis: despite having less overall genetic variation, the amazons are able to evolve due to selection on clonal lineages that promote appropriate neophobia/neophilia.
+
+
+***
+
+
+
+
+
+# Data 
+
+We performed object neophobia--the time it takes to approach a food source in the presence of a novel object--with four different object groups: control, weird same, weird different, and predator. Each group had three trials with different objects each trial that are still within the group category (eg. plant/rock/pot, all in control). The only exception was the 'weird same' group, which exposed the fish to the same letter-based object for each trial to test habituation.
+
+For each trial, we collected the amount of time it took for the fish to approach the feeding plate and start feeding (pecking at plate). To work with the data, we first need to create a github repository, upload a csv of our data, and then pull the data down into this Rmd to analyse it. 
+
+
+You first need to call you data from the internet (github) in order to run stats in Rstudio. Your data should be saved as a csv file, and uploaded to your github repository (github project). On github, click on your project, click on the csv file, then hit "raw" --you will need to copy the html of the raw file to use in Rstudio.
+
+To pull your data into Rstudio, you will need to use the following functions/packages: library(), curl package, curl(), read.csv()
+
+  * If you haven't done so already, install the curl package. You can install a package in two ways:
+      1) use `install.packages()` with the name of the package in the brackets
+      
+      2) go to your packages tab in the lower right corner (Files Plots **Packages** Help Viewer), hit install, and type in the name of the package before hitting the install button again.
+  
+
+
+```{r}
+#load in the curl package
+
+
+#pull the data from the internet using your html and assign a name
+
+
+#force your data to be read as a csv
+
+
+```
+
+Now we want to make sure your data was pulled correctly, and we also want to create two separate data frames for each of the species. This way we can do stats on three data frames: raw data (original file we pulled from the internet), sailfin (all the info but just for P. latipinna), and amazon (all the info but just for P. formosa).
+
+For this step, you will need: head(), data frame selection (aka data frame[data frame$name .....])
+  
+  * Make sure you assign a new name for your new data frames! If you keep the name the same for all three data frames, R will overwrite (aka erase) your data!
+  
+```{r}
+#check the head of your raw dataframe to make sure it was read in correctly
+#NOTE: whenever you read in a csv, R automatically adds X.U.FEFF to the first column. This is normal!
+
+
+#create a dataframe for sailfin by selecting data from your raw dataframe with P. latipinna as the species.
+
+
+#create a dataframe for amazons by selecting data from your raw dataframe with P. formosa as the species.
+
+
+#check the head of your new sailfin and amazon dataframes to make sure it selected correctly.
+
+
+
+```
+
+
+
+***
+
+
+
+# Analysis
+
+## Summary stats 
+
+Now we get to the fun part -actually analyzing our data! While most people want to jump right in to the most complicated stat models, it's actually better practice to get an idea of what your data look like. Getting summary statistics (mean, median, mode etc) and visualizing your data give you an idea of how your data relate to each other. This will make the conclusions from the more complicated stats easier to understand.
+
+So let's begin with summary statistics. For this you will need: rstatix package, get_summary_stats()
+
+  * Make sure to install the rstatix package. See the beginning of this Rmd on how to install.
+  
+  * The summary stats you want are: mean, standard deviation, median, and interquartile range.
+  
+  * For more details on how to use get_summary_stats() see: https://www.datanovia.com/en/lessons/wilcoxon-test-in-r/#summary-statistics-2
+  
+      + ex: get_summary_stats(weight, type ="median", data=mice)
+          + the %>% used on the website requires another package (tidyverse), but is just specifying the data frame to use; if you're not familiar with tidyverse, instead use data=name in function OR specify by mice$weight.
+
+
+```{r}
+#load in the rstatix package 
+
+
+#get summary statistics for all data
+
+
+#get summary statistics for the sailfin data  #NOTE: want to get an idea of how each species looks, so we'll separate them.
+
+
+#get summary statistics for the amazon data
+
+
+
+```
+
+***
+
+### Summary plots
+
+While numbers are great, a picture is often easier to understand. So let's graph out our data to get a better idea of what's going on. Box plots are a good graph to use, since it will show us the median and range of the data. 
+
+We'll focus on each treatment separately, then look at them all together. Our main goal is to see if the fish differ in how long it takes them to approach different objects.
+
+You may need to switch from a 'wide' format dataframe to a 'long' format dataframe in order from some of these functions to work. For this you will use the 'pivot_longer()' and 'pivot_wider()' functions from tidyverse (don't worry, if you're not familar with tidyverse, you can just follow the info in the link). For more info on how to use, see: https://tidyr.tidyverse.org/articles/pivot.html
+
+For this you will use: boxplot(), line() [can also use ggplot if you're more comfortable with that]
+
+  * For more info on boxplot() see: https://www.statmethods.net/graphs/boxplot.html
+  
+  * For more info on line() see: https://r-graph-gallery.com/line-plot.html
+  
+  * We want our boxplots to display time to approach by trial AND species. When we want to display our y value (time) by two x values (trial and species), we denote this as y~x1*x2
+  
+  * Remember to add x and y lables! 
+
+
+```{r}
+#create a box plot showing time to approach controls by trial and species
+
+
+#create a box plot showing time to approach weird-same by trial and species
+
+
+#create a box plot showing time to approach weird-diff by trial and species
+
+
+#create a box plot showing time to approach predators by trial and species
+
+
+
+#create a line plot showing time by trial for all four 
+
+
+
+```
+
+
+Now that you've done basic statistics, how does your data look? Write about the trends you see below.
+
+<font color="deeporchid4"> ***FIRST LOOK AT DATA:*** </font>
+
+
+***
+
+
+
+
+
+
+
+## Comparisons
+
+
+In our analysis, we want to answer the following questions:
+
+1) How do they perform across trials? In each treatment (control, predator, etc), were they consistent with their neophobia, or did they increase or decrease time?
+
+2) How do the treatments differ? Did certain objects cause an increase in neophobia compared to controls?
+
+3) Lastly, how do the species differ in neophobia? Are they similar or different, and does that change with treatment type?
+
+
+### Normality check 
+
+
+Before we begin, we need to check if our data follows a normal distribution. A lot of the parametric tests have normality as a requirement, so we need confirm our data fits this. If not, we might need to transform the data or perform non-parametric tests. 
+
+You will need to check for normality across the entire dataset. We will do this three ways: using a Shariro-Wilke test, histograms, and QQ plots.
+
+For this you will use: dplyr package, shapiro.test(), hist(), qqnorm(), and qqline()
+
+  * For more info on the Shapiro-Wilke tests, see: https://www.statology.org/shapiro-wilk-test-r/
+  
+  * For more info on histograms, see: https://www.datamentor.io/r-programming/histogram
+  
+  * For more info on QQ plots, see: http://www.sthda.com/english/wiki/qq-plots-quantile-quantile-plots-r-base-graphs
+  
+  
+```{r}
+#perform SW tests for entire dataset
+
+
+#Create histogram for entire dataset
+
+
+#Create QQplot for entire dataset
+
+
+```
+
+How does your data look? Normal, sorta normal, super not normal? Write about the trends you see below.
+
+<font color="deeporchid4"> ***NORMALITY CHECK:*** </font>
+
+
+
+***
+
+
+
+
+
+
+
+### Analysis
+
+
+To address our questions, we will first examine our data in small chunks (within species), then take a look at the whole picture (between species) using mixed effects models.
+
+
+NOTE: if the data was not normal, we need to transform it before continuing. Typical transformations include log or square root transformations. Transform data, and retest for normality. You can ignore this if the data was normal.
+
+```{r}
+#transform data
+
+#redo SW test
+
+#redo histogram
+
+#redo QQplot
+
+#make sure to recreate the two species dataframes with tranformed data
+
+
+```
+
+***
+
+
+#### Within species
+
+First, let's look within species.
+
+We'll be using generalized linear mixed models followed by Levene's tests. Mixed effects models come in two flavors: linear mixed effects and generalized linear mixed effects. In essence, linear models are used on "normal" data while generalized models can take into account small samples or non-normal distributions. 
+
+Both types of models have two types of effects: fixed effects and random effects. Fixed effects are explanatory variables (x values) that have a fixed or finite number of levels. Random effects are also explanatory variables, but that have an infinite number of levels. To illustrate the difference, check out this video: https://www.youtube.com/watch?v=VhMWPkTbXoY&t. In this case oat type and nitrogen concentrations are fixed effects because they are explanatory variables with either 3 or 4 levels (only 3 types of oats and only 4 concentrations of nitrogen) and blocks is a random effect because there was an infinite number of possible sites they could've picked to make a block. 
+
+For our experiment, take a second to think, what are our fixed effects and random effects? Type your answer below.
+
+<font color= "deeporchid4"> ***FIXED AND RANDOM EFFECTS:***</font>
+
+
+
+Levene's test examines the variation of three+ groups. For example, if there is a lot of variation in trial 1 but very little variation in trial 2 and 3, the Levene's test can tell us if this is statistically significant (so if they habituated for weird same, or if one predator type was more scary than the others). Additionally, variation is an important question when looking at our asexual amazons: in theory, they should not have a lot of variation since they are all clones. Any variation we see in them is important and interesting!Unfortunately, the Levene's test can't take into account random effects, so we'll perform a Levene's test on the residuals of our glmm. 
+
+One more thing we have to think about is how R is dealing with our trials. While it understands that these are categories, it doesn't realize that they're related. At the moment, R compares trial 1 and 3 and 1 and 2 equally; if there is a strong correlation between 1 and 3, but not so much 1 and 2, R may still say it's significant. This doesn't really show learning across trials. We know trials 1 and 2 and 2 and 3 are more related than 1 and 3, since they follow each other. When we *order* our data, R takes into account all three trials, and tells us if how they performed in trial 3 following trial 2 following trial 1 is significant. Another way to visualize this: without ordering our data, R tries to draw line of best fit between trials 1 and 2, then 2 and 3, then 1 and 3 (three separate lines), but when we order our data, R tries to make a best fit line between ALL trials (what we want).
+
+To order the data, you will use: ordered()
+
+  * remember to *replace* the original data with this ordered data 
+  
+```{r}
+#replace the trial column with ordered trials
+  
+  
+```
+  
+***
+
+
+
+#### Mixed models  
+  
+Ok, let's get stuck into mixed models. For mixed models and Levene's test, you'll need to use the following packages: lme4, lmerTest, car, and carData. You will need to install and load them up (using the library() function).
+
+Since our dataset is small, you will use the glmer() function. You will follow it up with the summary() function.
+
+  * glmer uses the format yvalues~xvalue*xvalue[more if needed] + (1|random effect), data =dataframe
+  
+  * remember to name your mixed model so you can use it in your summary function!
+  
+  * NOTE: after ordering the data, the output of the mixed models will give you name.L and name.Q. L stands for linear and Q stands for quadradics. It's the type of model R is fitting the data to, but to be honest, I'm not 100% positive what it means if one is significant over the other... 
+  
+  * levene's test follows a similar format of y~x*x, data=df BUT remember we need the y to be the residuals from the glmer to account for our random effects. 
+
+
+```{r}
+
+#load the lme4, lmerTest, car, and carData packages
+
+
+#perform a mixed model on the time across trials for control for amazons (don't for the random effects!)
+
+
+#repeat for sailfins
+
+
+#perform a mixed model on the time across trials for weird.same for amazons
+
+
+#repeat for sailfins
+
+
+#perform a mixed model on the time across trials for weird.diff for amazons
+
+
+#repeat for sailfins
+
+
+#perform a mixed model on the time across trials for predators for amazons
+
+
+#repeat for sailfins
+
+
+#perform a mixed model on the time across trials AND treatments for amazons
+
+
+#repeat for sailfins
+
+
+
+
+```
+
+
+***
+
+
+
+#### Between species
+
+Now, let's take a look between species.
+
+Here we want to see if there are differences between the species within each trial and treatment. For example, did amazon mollies take less time or vary less than sailfin mollies in trial 1 predator? Since we are only comparing two groups--amazons and sailfins--we'll use t-tests to compare means and F-tests to compare variation. 
+
+For t-tests and F-tests, you'll use the t.test() and var.test() functions respectively.
+
+  * make sure use 'alternative = "two.sided" ' for all tests! Two-sided tests indicate that the data can go in either direction --the mean or variation in trial 2 could be higher or lower than trial 1 for example.
+
+
+
+```{r}
+#run a t-test on time for trial 1 control between the sailfin mollies and amazon mollies
+
+#run a F-test on time for trial 1 control between the sailfin mollies and amazon mollies
+
+#repeat for trials 2 and 3
+
+
+
+#run a t-test on time for trial 1 weird.same between the sailfin mollies and amazon mollies
+
+#run a F-test on time for trial 1 weird.same between the sailfin mollies and amazon mollies
+
+#repeat for trials 2 and 3
+
+
+
+#run a t-test on time for trial 1 weird.diff between the sailfin mollies and amazon mollies
+
+#run a F-test on time for trial 1 weird.diff between the sailfin mollies and amazon mollies
+
+#repeat for trials 2 and 3
+
+
+
+
+#run a t-test on time for trial 1 predator between the sailfin mollies and amazon mollies
+
+#run a F-test on time for trial 1 predator between the sailfin mollies and amazon mollies
+
+#repeat for trials 2 and 3
+
+
+```
+
+
+What do you see in these small chunks? Are certain treatments different within species? How about the average compared to the variation? What differences, if any, are there between species?
+
+<font color="deeporchid4"> ***SMALL CHUNK ANALYSIS:*** </font>
+
+
+***
+
+
+
+
+
+
+
+#### Big picture
+
+
+While it is nice to explore our data in the small chunks, to really address our questions we need to take a look at the whole picture. We'll use the glmms again for this.
+
+
+```{r}
+#perform a mixed model on the time across treatments and species (trial as additional random)
+
+
+#perform a mixed model on the time across trial, treatment, and species 
+
+
+
+```
+
+
+What did you find? Did certain treatments differ within species? Did they differ between species? If there was an interaction effect, what does this mean?
+
+<font color= "deeporchid4"> ***RESULTS:***</font>
+
+
+
+
+
+
+
+
+
+***
+
+
+
+
+
+
+
+# Plots 
+
+It is always best to have visuals for the analyses you perform. This allows readers to visually grasp the comparisons you are making. Whenever possible, it is also a good idea to overlay the original datapoints so that readers can see how individuals change over trials or how the mean compares to the spread of the data (often this is done with faint grey points so as to not be too crowded on the graph). Lastly, it is important to label axes, add legends (if needed), add titles, and add or remove background grids to ensure the graph is easy to read and interpret. I tend to use ggplot to do all of this, but most can also be done in base R plotting. I'll leave it up to you to decide on which one to use and to google for instructions on how to change the aesthetics. What I'll list below is the plots you should have for your presentation (if you've done the plot already in summary stats, you can just copy it here).
+
+
+```{r}
+#trials 1-3 for control in amazons
+
+#trials 1-3 for weird.same in amazons
+
+#trials 1-3 for weird.diff in amazons
+
+#trials 1-3 for predator in amazons
+
+
+#trials 1-3 for control in sailfins
+
+#trials 1-3 for weird.same in sailfins
+
+#trials 1-3 for weird.diff in sailfins
+
+#trials 1-3 for predator in sailfins
+
+
+#trials 1-3 both species for control
+
+#trials 1-3 both species for weird.same
+
+#trials 1-3 both species for weird.diff
+
+#trials 1-3 both species for predator
+
+
+#trials 1-3 all treatments for amazons
+
+#trials 1-3 all treatments for sailfins
+
+
+#time for all treatments for both species (ignore trials)
+
+
+```
+
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
